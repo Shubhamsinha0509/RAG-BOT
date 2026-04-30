@@ -82,7 +82,6 @@
       align-items: center;
       justify-content: center;
       transition: background var(--transition), color var(--transition);
-      /* Dot-grid background */
       background-image:
         radial-gradient(ellipse at 15% 15%, rgba(91, 140, 255, 0.08) 0%, transparent 55%),
         radial-gradient(ellipse at 85% 85%, rgba(56, 226, 200, 0.05) 0%, transparent 55%),
@@ -370,36 +369,6 @@
       line-height: 1.75;
     }
 
-    /* Subject tabs */
-    .subject-tabs {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin: 4px 0;
-    }
-
-    .stab {
-      padding: 5px 14px;
-      border-radius: 20px;
-      font-size: 0.73rem;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      cursor: pointer;
-      border: 1px solid var(--border);
-      color: var(--text-secondary);
-      background: var(--bg-card);
-      transition: all 0.2s;
-    }
-
-    .stab:hover,
-    .stab.active {
-      background: var(--accent);
-      border-color: var(--accent);
-      color: #fff;
-      box-shadow: 0 2px 12px rgba(91, 140, 255, 0.3);
-    }
-
     .suggestion-chips {
       display: flex;
       flex-wrap: wrap;
@@ -508,7 +477,6 @@
       border-top-right-radius: 4px;
     }
 
-    /* Formula highlight inside bubbles */
     .bubble code {
       background: rgba(91, 140, 255, 0.12);
       border: 1px solid rgba(91, 140, 255, 0.2);
@@ -525,7 +493,31 @@
       padding: 0 4px;
     }
 
-    /* ── TYPING ── */
+    /* ── TYPING ANIMATION (text streaming cursor) ── */
+    .typing-cursor {
+      display: inline-block;
+      width: 2px;
+      height: 1em;
+      background: var(--accent);
+      margin-left: 2px;
+      vertical-align: text-bottom;
+      border-radius: 1px;
+      animation: blink 0.75s step-end infinite;
+    }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0;
+      }
+    }
+
+    /* ── TYPING DOTS INDICATOR ── */
     .typing-indicator {
       display: flex;
       gap: 9px;
@@ -600,6 +592,25 @@
       box-shadow: 0 0 0 3px rgba(91, 140, 255, 0.12);
     }
 
+    /* Recording state for the input row */
+    .input-row.recording {
+      border-color: var(--accent-rose);
+      box-shadow: 0 0 0 3px rgba(255, 107, 138, 0.15);
+      animation: recordingPulse 1.5s ease infinite;
+    }
+
+    @keyframes recordingPulse {
+
+      0%,
+      100% {
+        box-shadow: 0 0 0 3px rgba(255, 107, 138, 0.15);
+      }
+
+      50% {
+        box-shadow: 0 0 0 6px rgba(255, 107, 138, 0.06);
+      }
+    }
+
     .input-row textarea {
       flex: 1;
       background: transparent;
@@ -618,6 +629,74 @@
 
     .input-row textarea::placeholder {
       color: var(--text-muted);
+    }
+
+    /* ── MIC BUTTON ── */
+    .mic-btn {
+      width: 38px;
+      height: 38px;
+      background: var(--bg-card);
+      border: 1.5px solid var(--border);
+      border-radius: 11px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.2s;
+      position: relative;
+      overflow: visible;
+    }
+
+    .mic-btn:hover {
+      border-color: var(--accent);
+      background: var(--bg-msg-ai);
+      transform: translateY(-1px);
+    }
+
+    .mic-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: var(--text-secondary);
+      transition: fill 0.2s;
+      position: relative;
+      z-index: 1;
+    }
+
+    .mic-btn:hover svg {
+      fill: var(--accent);
+    }
+
+    /* Active / recording state */
+    .mic-btn.active {
+      background: var(--accent-rose);
+      border-color: var(--accent-rose);
+      box-shadow: 0 0 0 0 rgba(255, 107, 138, 0.5);
+      animation: micRipple 1.2s ease infinite;
+    }
+
+    .mic-btn.active svg {
+      fill: #fff;
+    }
+
+    @keyframes micRipple {
+      0% {
+        box-shadow: 0 0 0 0 rgba(255, 107, 138, 0.55);
+      }
+
+      70% {
+        box-shadow: 0 0 0 10px rgba(255, 107, 138, 0);
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgba(255, 107, 138, 0);
+      }
+    }
+
+    /* Not-supported state */
+    .mic-btn.unsupported {
+      opacity: 0.35;
+      cursor: not-allowed;
     }
 
     .send-btn {
@@ -650,6 +729,42 @@
       fill: #fff;
     }
 
+    /* ── STOP BUTTON ── */
+    .stop-btn {
+      display: none;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 107, 138, 0.1);
+      border: 1.5px solid var(--accent-rose);
+      border-radius: 20px;
+      padding: 5px 13px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--accent-rose);
+      cursor: pointer;
+      letter-spacing: 0.04em;
+      transition: all 0.2s;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .stop-btn:hover {
+      background: rgba(255, 107, 138, 0.18);
+      transform: translateY(-1px);
+      box-shadow: 0 3px 12px rgba(255, 107, 138, 0.25);
+    }
+
+    .stop-btn.visible {
+      display: flex;
+    }
+
+    .stop-btn .stop-icon {
+      width: 10px;
+      height: 10px;
+      background: var(--accent-rose);
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
     .input-footer {
       display: flex;
       align-items: center;
@@ -670,6 +785,73 @@
       padding: 1px 5px;
       font-size: 0.62rem;
       font-family: 'Outfit', sans-serif;
+    }
+
+    /* ── VOICE STATUS PILL ── */
+    .voice-status {
+      display: none;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.66rem;
+      font-weight: 600;
+      color: var(--accent-rose);
+      letter-spacing: 0.04em;
+      animation: fadeUp 0.2s ease both;
+    }
+
+    .voice-status.visible {
+      display: flex;
+    }
+
+    .voice-wave {
+      display: flex;
+      gap: 2px;
+      align-items: flex-end;
+      height: 14px;
+    }
+
+    .voice-wave span {
+      width: 3px;
+      background: var(--accent-rose);
+      border-radius: 2px;
+      animation: vwave 0.7s ease infinite alternate;
+    }
+
+    .voice-wave span:nth-child(1) {
+      height: 4px;
+      animation-delay: 0s;
+    }
+
+    .voice-wave span:nth-child(2) {
+      height: 9px;
+      animation-delay: 0.1s;
+    }
+
+    .voice-wave span:nth-child(3) {
+      height: 14px;
+      animation-delay: 0.2s;
+    }
+
+    .voice-wave span:nth-child(4) {
+      height: 7px;
+      animation-delay: 0.3s;
+    }
+
+    .voice-wave span:nth-child(5) {
+      height: 11px;
+      animation-delay: 0.15s;
+    }
+
+    @keyframes vwave {
+      from {
+        transform: scaleY(0.25);
+        opacity: 0.6;
+      }
+
+      to {
+        transform: scaleY(1);
+        opacity: 1;
+      }
     }
 
     /* ── AUDIO INDICATOR ── */
@@ -803,14 +985,7 @@
         </div>
         <h2>Namaste, Scholar!</h2>
         <p>Your AI tutor for JEE &amp; NEET prep. Ask me anything — concepts, numericals, shortcuts, previous year
-          questions, or revision tips.</p>
-        <div class="subject-tabs">
-          <div class="stab active">All Subjects</div>
-          <div class="stab">⚛️ Physics</div>
-          <div class="stab">🧪 Chemistry</div>
-          <div class="stab">➗ Maths</div>
-          <div class="stab">🧬 Biology</div>
-        </div>
+          questions, or revision tips. You can also speak your question using the mic button!</p>
         <div class="suggestion-chips">
           <div class="chip" onclick="sendChip(this)">⚡ Explain Newton's Laws with problems</div>
           <div class="chip" onclick="sendChip(this)">🧪 Organic Chemistry reaction mechanisms</div>
@@ -824,8 +999,19 @@
 
     <!-- INPUT AREA -->
     <div class="input-area">
-      <div class="input-row">
-        <textarea id="inputField" placeholder="Ask a concept, numerical, or doubt…" rows="1" autofocus></textarea>
+      <div class="input-row" id="inputRow">
+        <textarea id="inputField" placeholder="Ask a concept, numerical, or doubt… or tap 🎤 to speak" rows="1"
+          autofocus></textarea>
+
+        <!-- MIC BUTTON -->
+        <button class="mic-btn" id="micBtn" title="Hold or click to speak" onclick="toggleVoiceInput()">
+          <!-- Microphone SVG icon -->
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4zm6.5 9a1 1 0 0 1 1 1 7.5 7.5 0 0 1-7 7.47V21h2.5a1 1 0 0 1 0 2h-6a1 1 0 0 1 0-2H11v-2.53A7.5 7.5 0 0 1 4.5 11a1 1 0 0 1 2 0 5.5 5.5 0 0 0 11 0 1 1 0 0 1 1-1z" />
+          </svg>
+        </button>
+
         <button class="send-btn" id="sendBtn" title="Send">
           <svg viewBox="0 0 24 24">
             <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
@@ -833,10 +1019,26 @@
         </button>
       </div>
       <div class="input-footer">
-        <div class="input-hint"><kbd>Enter</kbd> to send &nbsp;·&nbsp; <kbd>Shift+Enter</kbd> new line</div>
-        <div class="audio-indicator" id="audioIndicator">
-          <div class="audio-bars"><span></span><span></span><span></span><span></span></div>
-          <span id="audioLabel">Audio ready</span>
+        <div class="input-hint">
+          <kbd>Enter</kbd> to send &nbsp;·&nbsp; <kbd>Shift+Enter</kbd> new line &nbsp;·&nbsp; <kbd>🎤</kbd> voice input
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <!-- VOICE STATUS -->
+          <div class="voice-status" id="voiceStatus">
+            <div class="voice-wave">
+              <span></span><span></span><span></span><span></span><span></span>
+            </div>
+            <span id="voiceLabel">Listening…</span>
+          </div>
+          <!-- STOP BUTTON -->
+          <button class="stop-btn" id="stopBtn" onclick="stopSpeaking()">
+            <div class="stop-icon"></div>
+            Stop Speaking
+          </button>
+          <div class="audio-indicator" id="audioIndicator">
+            <div class="audio-bars"><span></span><span></span><span></span><span></span></div>
+            <span id="audioLabel">Audio ready</span>
+          </div>
         </div>
       </div>
     </div>
@@ -860,11 +1062,16 @@
     const chatArea = document.getElementById('chatArea');
     const welcomeState = document.getElementById('welcomeState');
     const inputField = document.getElementById('inputField');
+    const inputRow = document.getElementById('inputRow');
     const sendBtn = document.getElementById('sendBtn');
+    const micBtn = document.getElementById('micBtn');
     const statusBadge = document.getElementById('statusBadge');
     const connBanner = document.getElementById('connBanner');
     const audioIndicator = document.getElementById('audioIndicator');
     const audioLabel = document.getElementById('audioLabel');
+    const stopBtn = document.getElementById('stopBtn');
+    const voiceStatus = document.getElementById('voiceStatus');
+    const voiceLabel = document.getElementById('voiceLabel');
 
     // ── AUTO-RESIZE TEXTAREA ───────────────────────────────────────────────────
     inputField.addEventListener('input', () => {
@@ -872,19 +1079,156 @@
       inputField.style.height = Math.min(inputField.scrollHeight, 120) + 'px';
     });
 
-    // ── SUBJECT TABS (decorative filter, real routing is backend) ──────────────
-    document.querySelectorAll('.stab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        document.querySelectorAll('.stab').forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-      });
-    });
-
     // ── CHIPS ─────────────────────────────────────────────────────────────────
     function sendChip(el) {
       const text = el.textContent.replace(/^[\S]+\s/, '').trim();
       inputField.value = text;
       sendMessage();
+    }
+
+    // ══════════════════════════════════════════════════════════════════════════
+    // VOICE INPUT — Web Speech API
+    // ══════════════════════════════════════════════════════════════════════════
+    //
+    // Uses the browser-native SpeechRecognition API (Chrome/Edge/Safari).
+    // Behaviour:
+    //   • Click mic  → start listening  (interim results shown as placeholder)
+    //   • Click again / silence timeout → stop and fill textarea with transcript
+    //   • If transcript found and auto-send is off → user can edit then send
+    //   • Language: en-IN (Indian English — handles accents better for JEE/NEET)
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    let recognition = null;
+    let isListening = false;
+    let interimTranscript = '';
+    let finalTranscript = '';
+
+    if (!SpeechRecognition) {
+      // Browser doesn't support Speech Recognition — disable mic button
+      micBtn.classList.add('unsupported');
+      micBtn.title = 'Voice input not supported in this browser. Try Chrome or Edge.';
+      micBtn.onclick = () => {
+        showSystemMessage('🎤 Voice input requires Chrome, Edge, or Safari browser.');
+      };
+    } else {
+      setupRecognition();
+    }
+
+    function setupRecognition() {
+      recognition = new SpeechRecognition();
+      recognition.continuous = false;        // single utterance
+      recognition.interimResults = true;     // show live partial results
+      recognition.lang = 'en-IN';            // Indian English
+      recognition.maxAlternatives = 1;
+
+      recognition.onstart = () => {
+        isListening = true;
+        micBtn.classList.add('active');
+        inputRow.classList.add('recording');
+        voiceStatus.classList.add('visible');
+        voiceLabel.textContent = 'Listening…';
+        inputField.placeholder = '🎤 Speak now…';
+        finalTranscript = '';
+        interimTranscript = '';
+      };
+
+      recognition.onresult = (event) => {
+        interimTranscript = '';
+        finalTranscript = '';
+
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const t = event.results[i][0].transcript;
+          if (event.results[i].isFinal) {
+            finalTranscript += t;
+          } else {
+            interimTranscript += t;
+          }
+        }
+
+        // Show interim in the textarea as user speaks
+        inputField.value = finalTranscript || interimTranscript;
+        inputField.style.height = 'auto';
+        inputField.style.height = Math.min(inputField.scrollHeight, 120) + 'px';
+
+        if (interimTranscript) {
+          voiceLabel.textContent = 'Hearing…';
+        }
+      };
+
+      recognition.onspeechend = () => {
+        voiceLabel.textContent = 'Processing…';
+      };
+
+      recognition.onend = () => {
+        stopVoiceUI();
+
+        // If we captured something, set it cleanly and focus for editing/sending
+        if (finalTranscript.trim()) {
+          inputField.value = finalTranscript.trim();
+          inputField.style.height = 'auto';
+          inputField.style.height = Math.min(inputField.scrollHeight, 120) + 'px';
+          inputField.focus();
+          // Place cursor at end
+          inputField.selectionStart = inputField.selectionEnd = inputField.value.length;
+        } else if (!inputField.value.trim()) {
+          inputField.placeholder = 'Ask a concept, numerical, or doubt… or tap 🎤 to speak';
+        }
+      };
+
+      recognition.onerror = (event) => {
+        stopVoiceUI();
+        inputField.placeholder = 'Ask a concept, numerical, or doubt… or tap 🎤 to speak';
+
+        const errMap = {
+          'not-allowed': '🚫 Microphone permission denied. Please allow mic access and try again.',
+          'no-speech': '🤫 No speech detected. Please try again.',
+          'network': '🌐 Network error during voice recognition.',
+          'audio-capture': '🎙️ No microphone found. Please connect a mic.',
+        };
+        const msg = errMap[event.error] || `⚠️ Voice recognition error: ${event.error}`;
+        showSystemMessage(msg);
+      };
+    }
+
+    function toggleVoiceInput() {
+      if (!recognition) return;
+
+      if (isListening) {
+        recognition.stop();
+      } else {
+        // Stop any ongoing TTS playback before listening
+        resetAudio();
+        stopBtn.classList.remove('visible');
+        audioIndicator.classList.remove('playing');
+        audioLabel.textContent = 'Audio ready';
+
+        try {
+          recognition.start();
+        } catch (e) {
+          // Already started — ignore
+        }
+      }
+    }
+
+    function stopVoiceUI() {
+      isListening = false;
+      micBtn.classList.remove('active');
+      inputRow.classList.remove('recording');
+      voiceStatus.classList.remove('visible');
+      inputField.placeholder = 'Ask a concept, numerical, or doubt… or tap 🎤 to speak';
+    }
+
+    // Show a brief system notice in chat
+    function showSystemMessage(text) {
+      const el = document.createElement('div');
+      el.style.cssText = `
+        text-align:center; font-size:0.72rem; color:var(--text-muted);
+        padding:6px 12px; animation:fadeUp 0.3s ease both;
+      `;
+      el.textContent = text;
+      chatArea.appendChild(el);
+      chatArea.scrollTop = chatArea.scrollHeight;
+      setTimeout(() => el.remove(), 5000);
     }
 
     // ── WEBSOCKET ─────────────────────────────────────────────────────────────
@@ -905,10 +1249,22 @@
         if (typeof event.data === 'string') {
           try {
             const msg = JSON.parse(event.data);
-            removeTyping();
-            if (msg.type === 'text') addMessage('ai', msg.data);
-            else if (msg.type === 'verified') addMessage('ai', msg.message);
-            else if (msg.type === 'auth_required') addMessage('ai', msg.message);
+            if (msg.type === 'text_chunk') {
+              appendStreamChunk(msg.data);
+            } else if (msg.type === 'text_done') {
+              finalizeStream();
+            } else if (msg.type === 'text') {
+              removeTyping();
+              addMessage('ai', msg.data);
+            } else if (msg.type === 'verified') {
+              removeTyping();
+              addMessage('ai', msg.message);
+            } else if (msg.type === 'auth_required') {
+              removeTyping();
+              addMessage('ai', msg.message);
+            } else if (msg.type === 'audio_end') {
+              markStreamDone();
+            }
           } catch (e) { console.error('Bad JSON', event.data); }
         } else if (event.data instanceof ArrayBuffer) {
           enqueueAudio(event.data);
@@ -945,7 +1301,8 @@
         welcomeState.style.transition = 'opacity 0.3s';
         setTimeout(() => welcomeState.remove(), 300);
       }
-      audioCtx.resume();
+      resetAudio();
+      initMediaSource();
       addMessage('user', text);
       showTyping();
       ws?.send(text);
@@ -962,19 +1319,21 @@
     function getTime() {
       return new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
     }
+
     function escapeHTML(s) {
       return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
     }
+
     function addMessage(role, text) {
       const row = document.createElement('div');
       row.className = `message-row ${role}`;
       row.innerHTML = `
-    <div class="avatar">${role === 'ai' ? '🤖' : '👤'}</div>
-    <div class="bubble-wrap">
-      <div class="sender-label">${role === 'ai' ? 'Vidya Sahayak' : 'You'}</div>
-      <div class="bubble">${escapeHTML(text)}</div>
-      <div class="timestamp">${getTime()}</div>
-    </div>`;
+        <div class="avatar">${role === 'ai' ? '🤖' : '👤'}</div>
+        <div class="bubble-wrap">
+          <div class="sender-label">${role === 'ai' ? 'Vidya Sahayak' : 'You'}</div>
+          <div class="bubble">${escapeHTML(text)}</div>
+          <div class="timestamp">${getTime()}</div>
+        </div>`;
       chatArea.appendChild(row);
       chatArea.scrollTop = chatArea.scrollHeight;
     }
@@ -984,137 +1343,134 @@
       const el = document.createElement('div');
       el.className = 'typing-indicator'; el.id = 'typingIndicator';
       el.innerHTML = `
-    <div class="avatar" style="background:linear-gradient(135deg,#1e3a8a,#3b82f6);box-shadow:0 2px 10px rgba(59,130,246,.3)">🤖</div>
-    <div class="typing-dots"><span></span><span></span><span></span></div>`;
+        <div class="avatar" style="background:linear-gradient(135deg,#1e3a8a,#3b82f6);box-shadow:0 2px 10px rgba(59,130,246,.3)">🤖</div>
+        <div class="typing-dots"><span></span><span></span><span></span></div>`;
       chatArea.appendChild(el);
       chatArea.scrollTop = chatArea.scrollHeight;
     }
+
     function removeTyping() {
       document.getElementById('typingIndicator')?.remove();
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
-    // AUDIO ENGINE v4 — PARALLEL DECODE + WEB AUDIO GAIN CHAIN
-    // ══════════════════════════════════════════════════════════════════════════
-    //
-    // Improvements over v3:
-    //  1. Parallel decode (same as v3) — no serial bottleneck.
-    //  2. GainNode chain: slight high-shelf boost (+2 dB above 3 kHz) and
-    //     a soft limiter (DynamicsCompressor) → voice sounds crisper and
-    //     more natural, no clipping on loud TTS bursts.
-    //  3. Accurate "last chunk" detection: the scheduler knows totalChunks
-    //     is final only when the server signals end-of-stream via a sentinel
-    //     JSON message. Until then it keeps looping waiting for more slots.
-    //  4. nextStartTime advances by audioBuffer.duration ONLY — zero gap.
-    //  5. First chunk uses a 70 ms one-time look-ahead; all subsequent
-    //     chunks latch with zero padding.
-    //
-    // Signal path:  source → gainNode → compressor → destination
+    // ── STREAMING TEXT ────────────────────────────────────────────────────────
+    let streamRow = null;
+    let streamBubble = null;
+    let streamText = '';
 
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)({ latencyHint: 'interactive' });
-
-    // ── Post-processing graph (built once, reused forever) ─────────────────
-    const gainNode = audioCtx.createGain();
-    gainNode.gain.value = 1.15;          // slight overall boost
-
-    const compressor = audioCtx.createDynamicsCompressor();
-    compressor.threshold.value = -18;    // dB
-    compressor.knee.value = 6;
-    compressor.ratio.value = 3;
-    compressor.attack.value = 0.003;
-    compressor.release.value = 0.18;
-
-    gainNode.connect(compressor);
-    compressor.connect(audioCtx.destination);
-
-    // ── State ──────────────────────────────────────────────────────────────
-    let nextStartTime = 0;
-    let chunkIdx = 0;   // sequence number for incoming chunks
-    let schedIdx = 0;   // next slot the scheduler will await
-    let streamDone = false; // true when server signals end-of-stream
-    let schedulerActive = false;
-    const decodeSlots = [];  // decodeSlots[i] = Promise<AudioBuffer|null>
-
-    // Call this from ws.onmessage for binary frames
-    function enqueueAudio(arrayBuffer) {
-      const i = chunkIdx++;
-      // Start decode immediately — parallel with all other in-flight decodes
-      decodeSlots[i] = audioCtx.decodeAudioData(arrayBuffer.slice(0))
-        .catch(err => { console.warn('decode error slot', i, err); return null; });
-
-      if (!schedulerActive) runScheduler();
-    }
-
-    // Call this when the server signals it has sent all chunks for this response
-    // e.g. from ws.onmessage when msg.type === 'audio_end'
-    function markStreamDone() {
-      streamDone = true;
-    }
-
-    async function runScheduler() {
-      schedulerActive = true;
-      audioIndicator.classList.add('playing');
-      audioLabel.textContent = 'Speaking…';
-
-      while (true) {
-        // Wait until the next slot exists
-        if (schedIdx >= decodeSlots.length) {
-          if (streamDone) break;           // no more chunks ever coming
-          await sleep(8);                  // poll — new chunk may arrive soon
-          continue;
-        }
-
-        // Await this slot's decode (may already be resolved if parallel decode finished)
-        const buf = await decodeSlots[schedIdx];
-        delete decodeSlots[schedIdx];      // GC
-        schedIdx++;
-
-        if (!buf) continue;                // bad chunk
-
-        const now = audioCtx.currentTime;
-
-        if (nextStartTime <= now + 0.005) {
-          // First chunk of utterance — one-time 70 ms look-ahead
-          nextStartTime = now + 0.07;
-        }
-        // Subsequent chunks: nextStartTime is already the exact end of the
-        // previous chunk — no gap at all.
-
-        const src = audioCtx.createBufferSource();
-        src.buffer = buf;
-        src.connect(gainNode);             // → compressor → destination
-        src.start(nextStartTime);
-
-        nextStartTime += buf.duration;     // advance by exactly chunk length
+    function appendStreamChunk(chunk) {
+      if (!streamRow) {
+        removeTyping();
+        streamText = '';
+        streamRow = document.createElement('div');
+        streamRow.className = 'message-row ai';
+        streamRow.innerHTML = `
+          <div class="avatar" style="background:linear-gradient(135deg,#1e3a8a,#3b82f6);box-shadow:0 2px 10px rgba(59,130,246,.3)">🤖</div>
+          <div class="bubble-wrap">
+            <div class="sender-label">Vidya Sahayak</div>
+            <div class="bubble" id="streamBubbleContent"></div>
+            <div class="timestamp">${getTime()}</div>
+          </div>`;
+        chatArea.appendChild(streamRow);
+        streamBubble = streamRow.querySelector('#streamBubbleContent');
       }
+      streamText += chunk;
+      streamBubble.innerHTML = escapeHTML(streamText) + '<span class="typing-cursor"></span>';
+      chatArea.scrollTop = chatArea.scrollHeight;
+    }
 
-      // Wait for last scheduled audio to finish before resetting UI
-      const wait = nextStartTime - audioCtx.currentTime;
-      if (wait > 0) await sleep(wait * 1000 + 80);
+    function finalizeStream() {
+      if (streamBubble) {
+        streamBubble.innerHTML = escapeHTML(streamText);
+        streamBubble.id = '';
+      }
+      streamRow = null;
+      streamBubble = null;
+      streamText = '';
+    }
 
-      // Reset for next response
-      schedulerActive = false;
-      streamDone = false;
-      chunkIdx = 0;
-      schedIdx = 0;
-      nextStartTime = 0;
+    // ── AUDIO ENGINE v6 — MEDIASOURCE NATIVE STREAMING ───────────────────────
+    const audioEl = document.createElement('audio');
+    audioEl.style.display = 'none';
+    audioEl.autoplay = true;
+    document.body.appendChild(audioEl);
+
+    let mediaSource = null;
+    let sourceBuffer = null;
+    let appendQueue = [];
+
+    function initMediaSource() {
+      appendQueue = [];
+      sourceBuffer = null;
+
+      mediaSource = new MediaSource();
+      audioEl.src = URL.createObjectURL(mediaSource);
+
+      mediaSource.addEventListener('sourceopen', () => {
+        const mimeType = MediaSource.isTypeSupported('audio/mpeg')
+          ? 'audio/mpeg'
+          : 'audio/webm;codecs=opus';
+        sourceBuffer = mediaSource.addSourceBuffer(mimeType);
+        sourceBuffer.mode = 'sequence';
+        sourceBuffer.addEventListener('updateend', drainQueue);
+        drainQueue();
+      }, { once: true });
+    }
+
+    function drainQueue() {
+      if (!sourceBuffer || sourceBuffer.updating || appendQueue.length === 0) return;
+      sourceBuffer.appendBuffer(appendQueue.shift());
+    }
+
+    function enqueueAudio(arrayBuffer) {
+      if (!audioIndicator.classList.contains('playing')) {
+        audioIndicator.classList.add('playing');
+        audioLabel.textContent = 'Speaking…';
+        stopBtn.classList.add('visible');
+      }
+      appendQueue.push(arrayBuffer.slice(0));
+      drainQueue();
+    }
+
+    function markStreamDone() {
+      if (!mediaSource || mediaSource.readyState !== 'open') return;
+      const tryEnd = () => {
+        if (sourceBuffer && sourceBuffer.updating) {
+          sourceBuffer.addEventListener('updateend', tryEnd, { once: true });
+          return;
+        }
+        try { mediaSource.endOfStream(); } catch (e) { }
+      };
+      tryEnd();
+    }
+
+    function resetAudio() {
+      appendQueue = [];
+      audioEl.pause();
+      audioEl.src = '';
+      sourceBuffer = null;
+      if (mediaSource) {
+        try {
+          if (mediaSource.readyState === 'open') mediaSource.endOfStream();
+        } catch (e) { }
+        mediaSource = null;
+      }
+    }
+
+    function stopSpeaking() {
+      resetAudio();
+      stopBtn.classList.remove('visible');
       audioIndicator.classList.remove('playing');
       audioLabel.textContent = 'Audio ready';
     }
 
-    function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+    audioEl.addEventListener('ended', () => {
+      stopBtn.classList.remove('visible');
+      audioIndicator.classList.remove('playing');
+      audioLabel.textContent = 'Audio ready';
+    });
 
-    // Resume AudioContext on first click (browser autoplay policy)
-    document.addEventListener('click', () => audioCtx.resume(), { once: true });
-
-    // ── Hook markStreamDone into ws.onmessage ────────────────────────────
-    // If your server sends { "type": "audio_end" } after the last audio chunk,
-    // uncomment the line below inside ws.onmessage:
-    //   else if (msg.type === 'audio_end') markStreamDone();
-    //
-    // If your server sends no such signal, the scheduler auto-detects silence
-    // via the poll loop above and will stop after ~8ms of no new chunks.
-    // You can also call markStreamDone() manually after a timeout if needed.
+    initMediaSource();
   </script>
 </body>
 
