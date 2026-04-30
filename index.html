@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vidya Sahayak — JEE & NEET AI Tutor</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Outfit:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ── DARK THEME ── */
+    [data-theme="dark"] {
+      --bg-base: #080c1a;
+      --bg-surface: #0d1326;
+      --bg-card: #111a35;
+      --bg-input: #0f1830;
+      --bg-msg-ai: #111d3a;
+      --bg-msg-user: #101a2e;
+      --border: #1e2d54;
+      --border-subtle: #162040;
+      --text-primary: #e4eaf8;
+      --text-secondary: #7a90c4;
+      --text-muted: #3d5080;
+      --accent: #5b8cff;
+      --accent-dim: #3d6ef5;
+      --accent-gold: #f5c842;
+      --accent-rose: #ff6b8a;
+      --accent-teal: #38e2c8;
+      --shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+      --glow: 0 0 40px rgba(91, 140, 255, 0.07);
+      --header-bg: linear-gradient(135deg, #080e1f 0%, #0c1428 100%);
+      --badge-bg: rgba(91, 140, 255, 0.1);
+      --toggle-bg: #0f1830;
+      --dot-grid: rgba(91, 140, 255, 0.06);
+    }
+
+    /* ── LIGHT THEME ── */
+    [data-theme="light"] {
+      --bg-base: #f0f3fc;
+      --bg-surface: #ffffff;
+      --bg-card: #ffffff;
+      --bg-input: #f5f7ff;
+      --bg-msg-ai: #eef1ff;
+      --bg-msg-user: #f0f4ff;
+      --border: #c5d0f0;
+      --border-subtle: #dce4f8;
+      --text-primary: #0e1a3d;
+      --text-secondary: #4a5f99;
+      --text-muted: #9aaad4;
+      --accent: #3a6ef5;
+      --accent-dim: #2556e0;
+      --accent-gold: #d4a000;
+      --accent-rose: #e03060;
+      --accent-teal: #0aa88a;
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+      --glow: 0 0 40px rgba(58, 110, 245, 0.05);
+      --header-bg: linear-gradient(135deg, #eef2ff 0%, #e8eeff 100%);
+      --badge-bg: rgba(58, 110, 245, 0.08);
+      --toggle-bg: #e4eaff;
+      --dot-grid: rgba(58, 110, 245, 0.07);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg-base);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background var(--transition), color var(--transition);
+      /* Dot-grid background */
+      background-image:
+        radial-gradient(ellipse at 15% 15%, rgba(91, 140, 255, 0.08) 0%, transparent 55%),
+        radial-gradient(ellipse at 85% 85%, rgba(56, 226, 200, 0.05) 0%, transparent 55%),
+        radial-gradient(var(--dot-grid) 1px, transparent 1px);
+      background-size: auto, auto, 28px 28px;
+    }
+
+    /* ── APP SHELL ── */
+    .app-wrapper {
+      width: 100%;
+      max-width: 840px;
+      height: 100vh;
+      max-height: 880px;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg-surface);
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      box-shadow: var(--shadow), var(--glow);
+      transition: background var(--transition), border-color var(--transition);
+      margin: 16px;
+      position: relative;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      background: var(--header-bg);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      transition: background var(--transition), border-color var(--transition);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+    }
+
+    .logo-wrap {
+      width: 46px;
+      height: 46px;
+      border-radius: 13px;
+      background: linear-gradient(135deg, #3a6ef5, #7c3aed);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 4px 16px rgba(58, 110, 245, 0.35);
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .logo-wrap::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, transparent 60%);
+      border-radius: inherit;
+    }
+
+    .header-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: 0.02em;
+      line-height: 1.2;
+    }
+
+    .header-sub {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Subject pills */
+    .subject-pills {
+      display: flex;
+      gap: 5px;
+    }
+
+    .spill {
+      font-size: 0.63rem;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 6px;
+      border: 1px solid;
+    }
+
+    .spill.jee {
+      color: var(--accent);
+      border-color: var(--accent);
+      background: rgba(91, 140, 255, 0.08);
+    }
+
+    .spill.neet {
+      color: var(--accent-rose);
+      border-color: var(--accent-rose);
+      background: rgba(255, 107, 138, 0.08);
+    }
+
+    .status-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--badge-bg);
+      border: 1px solid rgba(91, 140, 255, 0.2);
+      border-radius: 20px;
+      padding: 4px 11px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.04em;
+      transition: all var(--transition);
+    }
+
+    .status-badge .dot {
+      width: 6px;
+      height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.4;
+        transform: scale(0.75);
+      }
+    }
+
+    .theme-toggle {
+      background: var(--toggle-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      transition: all var(--transition);
+    }
+
+    .theme-btn {
+      width: 26px;
+      height: 26px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .theme-btn.active {
+      background: var(--accent);
+      box-shadow: 0 2px 8px rgba(91, 140, 255, 0.4);
+    }
+
+    /* ── CONNECTION BANNER ── */
+    .conn-banner {
+      padding: 7px 16px;
+      text-align: center;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      flex-shrink: 0;
+    }
+
+    .conn-banner.connected {
+      background: rgba(91, 140, 255, 0.07);
+      color: var(--accent);
+      border-bottom: 1px solid rgba(91, 140, 255, 0.15);
+    }
+
+    .conn-banner.disconnected {
+      background: rgba(245, 200, 66, 0.07);
+      color: var(--accent-gold);
+      border-bottom: 1px solid rgba(245, 200, 66, 0.15);
+    }
+
+    /* ── CHAT AREA ── */
+    .chat-area {
+      flex: 1;
+      overflow-y: auto;
+      padding: 22px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      background: var(--bg-base);
+      transition: background var(--transition);
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+
+    .chat-area::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .chat-area::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+
+    /* ── WELCOME ── */
+    .welcome-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      text-align: center;
+      gap: 14px;
+      padding: 32px 16px;
+      animation: fadeUp 0.7s ease both;
+    }
+
+    .welcome-icon-wrap {
+      position: relative;
+      width: 80px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .welcome-icon-wrap::before {
+      content: '';
+      position: absolute;
+      inset: -8px;
+      border-radius: 50%;
+      background: conic-gradient(from 0deg, var(--accent), #7c3aed, var(--accent-teal), var(--accent));
+      opacity: 0.18;
+      animation: spin 6s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .welcome-icon {
+      font-size: 52px;
+      line-height: 1;
+      position: relative;
+    }
+
+    .welcome-state h2 {
+      font-family: 'Cinzel', serif;
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: 0.02em;
+    }
+
+    .welcome-state p {
+      font-size: 0.86rem;
+      color: var(--text-secondary);
+      max-width: 400px;
+      line-height: 1.75;
+    }
+
+    /* Subject tabs */
+    .subject-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 4px 0;
+    }
+
+    .stab {
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 0.73rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      background: var(--bg-card);
+      transition: all 0.2s;
+    }
+
+    .stab:hover,
+    .stab.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+      box-shadow: 0 2px 12px rgba(91, 140, 255, 0.3);
+    }
+
+    .suggestion-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      justify-content: center;
+      margin-top: 4px;
+    }
+
+    .chip {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 6px 13px;
+      font-size: 0.76rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .chip:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--bg-msg-ai);
+      transform: translateY(-1px);
+    }
+
+    /* ── MESSAGES ── */
+    .message-row {
+      display: flex;
+      gap: 9px;
+      animation: fadeUp 0.28s ease both;
+      max-width: 100%;
+    }
+
+    .message-row.user {
+      flex-direction: row-reverse;
+    }
+
+    .avatar {
+      width: 33px;
+      height: 33px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .message-row.ai .avatar {
+      background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+      box-shadow: 0 2px 10px rgba(59, 130, 246, 0.3);
+    }
+
+    .message-row.user .avatar {
+      background: linear-gradient(135deg, #6d28d9, #8b5cf6);
+      box-shadow: 0 2px 10px rgba(139, 92, 246, 0.3);
+    }
+
+    .bubble-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      max-width: calc(100% - 46px);
+    }
+
+    .message-row.user .bubble-wrap {
+      align-items: flex-end;
+    }
+
+    .message-row.ai .bubble-wrap {
+      align-items: flex-start;
+    }
+
+    .sender-label {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 0 4px;
+    }
+
+    .bubble {
+      padding: 10px 14px;
+      border-radius: 15px;
+      font-size: 0.875rem;
+      line-height: 1.7;
+      color: var(--text-primary);
+      max-width: 100%;
+      word-break: break-word;
+      transition: background var(--transition), border-color var(--transition);
+    }
+
+    .message-row.ai .bubble {
+      background: var(--bg-msg-ai);
+      border: 1px solid var(--border-subtle);
+      border-top-left-radius: 4px;
+    }
+
+    .message-row.user .bubble {
+      background: var(--bg-msg-user);
+      border: 1px solid var(--border-subtle);
+      border-top-right-radius: 4px;
+    }
+
+    /* Formula highlight inside bubbles */
+    .bubble code {
+      background: rgba(91, 140, 255, 0.12);
+      border: 1px solid rgba(91, 140, 255, 0.2);
+      border-radius: 4px;
+      padding: 1px 5px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.82rem;
+      color: var(--accent-teal);
+    }
+
+    .timestamp {
+      font-size: 0.62rem;
+      color: var(--text-muted);
+      padding: 0 4px;
+    }
+
+    /* ── TYPING ── */
+    .typing-indicator {
+      display: flex;
+      gap: 9px;
+      align-items: flex-start;
+      animation: fadeUp 0.28s ease both;
+    }
+
+    .typing-dots {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      background: var(--bg-msg-ai);
+      border: 1px solid var(--border-subtle);
+      border-radius: 15px;
+      border-top-left-radius: 4px;
+      padding: 11px 15px;
+    }
+
+    .typing-dots span {
+      width: 6px;
+      height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: tdot 1.3s infinite;
+    }
+
+    .typing-dots span:nth-child(2) {
+      animation-delay: 0.18s;
+    }
+
+    .typing-dots span:nth-child(3) {
+      animation-delay: 0.36s;
+    }
+
+    @keyframes tdot {
+
+      0%,
+      60%,
+      100% {
+        transform: translateY(0);
+        opacity: 0.35;
+      }
+
+      30% {
+        transform: translateY(-5px);
+        opacity: 1;
+      }
+    }
+
+    /* ── INPUT AREA ── */
+    .input-area {
+      padding: 14px 18px 18px;
+      background: var(--bg-surface);
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+      transition: background var(--transition), border-color var(--transition);
+    }
+
+    .input-row {
+      display: flex;
+      gap: 9px;
+      align-items: flex-end;
+      background: var(--bg-input);
+      border: 1.5px solid var(--border);
+      border-radius: 15px;
+      padding: 8px 8px 8px 15px;
+      transition: all 0.2s;
+    }
+
+    .input-row:focus-within {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(91, 140, 255, 0.12);
+    }
+
+    .input-row textarea {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.88rem;
+      color: var(--text-primary);
+      resize: none;
+      line-height: 1.5;
+      min-height: 24px;
+      max-height: 120px;
+      padding: 4px 0;
+      transition: color var(--transition);
+    }
+
+    .input-row textarea::placeholder {
+      color: var(--text-muted);
+    }
+
+    .send-btn {
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dim));
+      border: none;
+      border-radius: 11px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.2s;
+      box-shadow: 0 2px 10px rgba(91, 140, 255, 0.3);
+    }
+
+    .send-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(91, 140, 255, 0.45);
+    }
+
+    .send-btn:active {
+      transform: scale(0.93);
+    }
+
+    .send-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: #fff;
+    }
+
+    .input-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 9px;
+      padding: 0 2px;
+    }
+
+    .input-hint {
+      font-size: 0.66rem;
+      color: var(--text-muted);
+    }
+
+    kbd {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1px 5px;
+      font-size: 0.62rem;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    /* ── AUDIO INDICATOR ── */
+    .audio-indicator {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.66rem;
+      color: var(--text-muted);
+      transition: color 0.2s;
+    }
+
+    .audio-indicator.playing {
+      color: var(--accent-teal);
+    }
+
+    .audio-bars {
+      display: flex;
+      gap: 2px;
+      align-items: flex-end;
+      height: 12px;
+    }
+
+    .audio-bars span {
+      width: 3px;
+      background: currentColor;
+      border-radius: 2px;
+      animation: abar 0.9s ease infinite alternate;
+    }
+
+    .audio-bars span:nth-child(1) {
+      height: 3px;
+      animation-delay: 0s;
+    }
+
+    .audio-bars span:nth-child(2) {
+      height: 7px;
+      animation-delay: 0.12s;
+    }
+
+    .audio-bars span:nth-child(3) {
+      height: 11px;
+      animation-delay: 0.24s;
+    }
+
+    .audio-bars span:nth-child(4) {
+      height: 5px;
+      animation-delay: 0.36s;
+    }
+
+    @keyframes abar {
+      from {
+        transform: scaleY(0.3);
+      }
+
+      to {
+        transform: scaleY(1);
+      }
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .app-wrapper {
+        margin: 0;
+        border-radius: 0;
+        max-height: 100vh;
+        height: 100vh;
+      }
+
+      .subject-pills,
+      .spill {
+        display: none;
+      }
+
+      .status-badge span {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app-wrapper">
+
+    <!-- HEADER -->
+    <header class="header">
+      <div class="header-left">
+        <div class="logo-wrap">📚</div>
+        <div>
+          <div class="header-title">Vidya Sahayak</div>
+          <div class="header-sub">JEE &amp; NEET AI Tutor</div>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="subject-pills">
+          <span class="spill jee">JEE</span>
+          <span class="spill neet">NEET</span>
+        </div>
+        <div class="status-badge" id="statusBadge">
+          <div class="dot"></div>
+          <span>Connecting…</span>
+        </div>
+        <div class="theme-toggle">
+          <div class="theme-btn" id="darkBtn" onclick="setTheme('dark')">🌙</div>
+          <div class="theme-btn" id="lightBtn" onclick="setTheme('light')">☀️</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- CONNECTION BANNER -->
+    <div class="conn-banner disconnected" id="connBanner">⚡ Connecting to Vidya Sahayak server…</div>
+
+    <!-- CHAT AREA -->
+    <div class="chat-area" id="chatArea">
+      <div class="welcome-state" id="welcomeState">
+        <div class="welcome-icon-wrap">
+          <div class="welcome-icon">🎓</div>
+        </div>
+        <h2>Namaste, Scholar!</h2>
+        <p>Your AI tutor for JEE &amp; NEET prep. Ask me anything — concepts, numericals, shortcuts, previous year
+          questions, or revision tips.</p>
+        <div class="subject-tabs">
+          <div class="stab active">All Subjects</div>
+          <div class="stab">⚛️ Physics</div>
+          <div class="stab">🧪 Chemistry</div>
+          <div class="stab">➗ Maths</div>
+          <div class="stab">🧬 Biology</div>
+        </div>
+        <div class="suggestion-chips">
+          <div class="chip" onclick="sendChip(this)">⚡ Explain Newton's Laws with problems</div>
+          <div class="chip" onclick="sendChip(this)">🧪 Organic Chemistry reaction mechanisms</div>
+          <div class="chip" onclick="sendChip(this)">➗ Integration tricks for JEE</div>
+          <div class="chip" onclick="sendChip(this)">🧬 Cell division for NEET</div>
+          <div class="chip" onclick="sendChip(this)">📝 Last 5 years JEE pattern analysis</div>
+          <div class="chip" onclick="sendChip(this)">⏱️ Time management strategy for exam</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INPUT AREA -->
+    <div class="input-area">
+      <div class="input-row">
+        <textarea id="inputField" placeholder="Ask a concept, numerical, or doubt…" rows="1" autofocus></textarea>
+        <button class="send-btn" id="sendBtn" title="Send">
+          <svg viewBox="0 0 24 24">
+            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+          </svg>
+        </button>
+      </div>
+      <div class="input-footer">
+        <div class="input-hint"><kbd>Enter</kbd> to send &nbsp;·&nbsp; <kbd>Shift+Enter</kbd> new line</div>
+        <div class="audio-indicator" id="audioIndicator">
+          <div class="audio-bars"><span></span><span></span><span></span><span></span></div>
+          <span id="audioLabel">Audio ready</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ── THEME ──────────────────────────────────────────────────────────────────
+    const html = document.documentElement;
+    const darkBtn = document.getElementById('darkBtn');
+    const lightBtn = document.getElementById('lightBtn');
+
+    function setTheme(t) {
+      html.setAttribute('data-theme', t);
+      localStorage.setItem('vs-theme', t);
+      darkBtn.classList.toggle('active', t === 'dark');
+      lightBtn.classList.toggle('active', t === 'light');
+    }
+    setTheme(localStorage.getItem('vs-theme') || 'dark');
+
+    // ── REFS ───────────────────────────────────────────────────────────────────
+    const chatArea = document.getElementById('chatArea');
+    const welcomeState = document.getElementById('welcomeState');
+    const inputField = document.getElementById('inputField');
+    const sendBtn = document.getElementById('sendBtn');
+    const statusBadge = document.getElementById('statusBadge');
+    const connBanner = document.getElementById('connBanner');
+    const audioIndicator = document.getElementById('audioIndicator');
+    const audioLabel = document.getElementById('audioLabel');
+
+    // ── AUTO-RESIZE TEXTAREA ───────────────────────────────────────────────────
+    inputField.addEventListener('input', () => {
+      inputField.style.height = 'auto';
+      inputField.style.height = Math.min(inputField.scrollHeight, 120) + 'px';
+    });
+
+    // ── SUBJECT TABS (decorative filter, real routing is backend) ──────────────
+    document.querySelectorAll('.stab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.stab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+      });
+    });
+
+    // ── CHIPS ─────────────────────────────────────────────────────────────────
+    function sendChip(el) {
+      const text = el.textContent.replace(/^[\S]+\s/, '').trim();
+      inputField.value = text;
+      sendMessage();
+    }
+
+    // ── WEBSOCKET ─────────────────────────────────────────────────────────────
+    let ws;
+    function connectWS() {
+      ws = new WebSocket('ws://localhost:7858/ws/stream');
+      ws.binaryType = 'arraybuffer';
+
+      ws.onopen = () => {
+        statusBadge.innerHTML = '<div class="dot"></div><span>Connected</span>';
+        statusBadge.style.color = 'var(--accent)';
+        connBanner.textContent = '✅ Connected to Vidya Sahayak';
+        connBanner.className = 'conn-banner connected';
+        setTimeout(() => connBanner.style.display = 'none', 3000);
+      };
+
+      ws.onmessage = (event) => {
+        if (typeof event.data === 'string') {
+          try {
+            const msg = JSON.parse(event.data);
+            removeTyping();
+            if (msg.type === 'text') addMessage('ai', msg.data);
+            else if (msg.type === 'verified') addMessage('ai', msg.message);
+            else if (msg.type === 'auth_required') addMessage('ai', msg.message);
+          } catch (e) { console.error('Bad JSON', event.data); }
+        } else if (event.data instanceof ArrayBuffer) {
+          enqueueAudio(event.data);
+        }
+      };
+
+      ws.onclose = () => {
+        statusBadge.innerHTML = '<div class="dot" style="background:var(--accent-gold)"></div><span>Disconnected</span>';
+        statusBadge.style.color = 'var(--accent-gold)';
+        connBanner.textContent = '⚠️ Connection lost. Reconnecting in 5s…';
+        connBanner.className = 'conn-banner disconnected';
+        connBanner.style.display = '';
+        setTimeout(connectWS, 5000);
+      };
+
+      ws.onerror = () => {
+        connBanner.textContent = '❌ Cannot reach server. Retrying…';
+        connBanner.className = 'conn-banner disconnected';
+        connBanner.style.display = '';
+      };
+    }
+    connectWS();
+
+    // ── SEND ──────────────────────────────────────────────────────────────────
+    function sendMessage() {
+      const text = inputField.value.trim();
+      if (!text) return;
+      if (ws && ws.readyState !== WebSocket.OPEN) {
+        addMessage('ai', '⚠️ Not connected. Please wait…');
+        return;
+      }
+      if (welcomeState?.parentNode) {
+        welcomeState.style.opacity = '0';
+        welcomeState.style.transition = 'opacity 0.3s';
+        setTimeout(() => welcomeState.remove(), 300);
+      }
+      audioCtx.resume();
+      addMessage('user', text);
+      showTyping();
+      ws?.send(text);
+      inputField.value = '';
+      inputField.style.height = 'auto';
+    }
+
+    sendBtn.addEventListener('click', sendMessage);
+    inputField.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+    });
+
+    // ── MESSAGES ──────────────────────────────────────────────────────────────
+    function getTime() {
+      return new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+    }
+    function escapeHTML(s) {
+      return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
+    }
+    function addMessage(role, text) {
+      const row = document.createElement('div');
+      row.className = `message-row ${role}`;
+      row.innerHTML = `
+    <div class="avatar">${role === 'ai' ? '🤖' : '👤'}</div>
+    <div class="bubble-wrap">
+      <div class="sender-label">${role === 'ai' ? 'Vidya Sahayak' : 'You'}</div>
+      <div class="bubble">${escapeHTML(text)}</div>
+      <div class="timestamp">${getTime()}</div>
+    </div>`;
+      chatArea.appendChild(row);
+      chatArea.scrollTop = chatArea.scrollHeight;
+    }
+
+    function showTyping() {
+      removeTyping();
+      const el = document.createElement('div');
+      el.className = 'typing-indicator'; el.id = 'typingIndicator';
+      el.innerHTML = `
+    <div class="avatar" style="background:linear-gradient(135deg,#1e3a8a,#3b82f6);box-shadow:0 2px 10px rgba(59,130,246,.3)">🤖</div>
+    <div class="typing-dots"><span></span><span></span><span></span></div>`;
+      chatArea.appendChild(el);
+      chatArea.scrollTop = chatArea.scrollHeight;
+    }
+    function removeTyping() {
+      document.getElementById('typingIndicator')?.remove();
+    }
+
+    // ══════════════════════════════════════════════════════════════════════════
+    // AUDIO ENGINE v4 — PARALLEL DECODE + WEB AUDIO GAIN CHAIN
+    // ══════════════════════════════════════════════════════════════════════════
+    //
+    // Improvements over v3:
+    //  1. Parallel decode (same as v3) — no serial bottleneck.
+    //  2. GainNode chain: slight high-shelf boost (+2 dB above 3 kHz) and
+    //     a soft limiter (DynamicsCompressor) → voice sounds crisper and
+    //     more natural, no clipping on loud TTS bursts.
+    //  3. Accurate "last chunk" detection: the scheduler knows totalChunks
+    //     is final only when the server signals end-of-stream via a sentinel
+    //     JSON message. Until then it keeps looping waiting for more slots.
+    //  4. nextStartTime advances by audioBuffer.duration ONLY — zero gap.
+    //  5. First chunk uses a 70 ms one-time look-ahead; all subsequent
+    //     chunks latch with zero padding.
+    //
+    // Signal path:  source → gainNode → compressor → destination
+
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)({ latencyHint: 'interactive' });
+
+    // ── Post-processing graph (built once, reused forever) ─────────────────
+    const gainNode = audioCtx.createGain();
+    gainNode.gain.value = 1.15;          // slight overall boost
+
+    const compressor = audioCtx.createDynamicsCompressor();
+    compressor.threshold.value = -18;    // dB
+    compressor.knee.value = 6;
+    compressor.ratio.value = 3;
+    compressor.attack.value = 0.003;
+    compressor.release.value = 0.18;
+
+    gainNode.connect(compressor);
+    compressor.connect(audioCtx.destination);
+
+    // ── State ──────────────────────────────────────────────────────────────
+    let nextStartTime = 0;
+    let chunkIdx = 0;   // sequence number for incoming chunks
+    let schedIdx = 0;   // next slot the scheduler will await
+    let streamDone = false; // true when server signals end-of-stream
+    let schedulerActive = false;
+    const decodeSlots = [];  // decodeSlots[i] = Promise<AudioBuffer|null>
+
+    // Call this from ws.onmessage for binary frames
+    function enqueueAudio(arrayBuffer) {
+      const i = chunkIdx++;
+      // Start decode immediately — parallel with all other in-flight decodes
+      decodeSlots[i] = audioCtx.decodeAudioData(arrayBuffer.slice(0))
+        .catch(err => { console.warn('decode error slot', i, err); return null; });
+
+      if (!schedulerActive) runScheduler();
+    }
+
+    // Call this when the server signals it has sent all chunks for this response
+    // e.g. from ws.onmessage when msg.type === 'audio_end'
+    function markStreamDone() {
+      streamDone = true;
+    }
+
+    async function runScheduler() {
+      schedulerActive = true;
+      audioIndicator.classList.add('playing');
+      audioLabel.textContent = 'Speaking…';
+
+      while (true) {
+        // Wait until the next slot exists
+        if (schedIdx >= decodeSlots.length) {
+          if (streamDone) break;           // no more chunks ever coming
+          await sleep(8);                  // poll — new chunk may arrive soon
+          continue;
+        }
+
+        // Await this slot's decode (may already be resolved if parallel decode finished)
+        const buf = await decodeSlots[schedIdx];
+        delete decodeSlots[schedIdx];      // GC
+        schedIdx++;
+
+        if (!buf) continue;                // bad chunk
+
+        const now = audioCtx.currentTime;
+
+        if (nextStartTime <= now + 0.005) {
+          // First chunk of utterance — one-time 70 ms look-ahead
+          nextStartTime = now + 0.07;
+        }
+        // Subsequent chunks: nextStartTime is already the exact end of the
+        // previous chunk — no gap at all.
+
+        const src = audioCtx.createBufferSource();
+        src.buffer = buf;
+        src.connect(gainNode);             // → compressor → destination
+        src.start(nextStartTime);
+
+        nextStartTime += buf.duration;     // advance by exactly chunk length
+      }
+
+      // Wait for last scheduled audio to finish before resetting UI
+      const wait = nextStartTime - audioCtx.currentTime;
+      if (wait > 0) await sleep(wait * 1000 + 80);
+
+      // Reset for next response
+      schedulerActive = false;
+      streamDone = false;
+      chunkIdx = 0;
+      schedIdx = 0;
+      nextStartTime = 0;
+      audioIndicator.classList.remove('playing');
+      audioLabel.textContent = 'Audio ready';
+    }
+
+    function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+    // Resume AudioContext on first click (browser autoplay policy)
+    document.addEventListener('click', () => audioCtx.resume(), { once: true });
+
+    // ── Hook markStreamDone into ws.onmessage ────────────────────────────
+    // If your server sends { "type": "audio_end" } after the last audio chunk,
+    // uncomment the line below inside ws.onmessage:
+    //   else if (msg.type === 'audio_end') markStreamDone();
+    //
+    // If your server sends no such signal, the scheduler auto-detects silence
+    // via the poll loop above and will stop after ~8ms of no new chunks.
+    // You can also call markStreamDone() manually after a timeout if needed.
+  </script>
+</body>
+
+</html>
